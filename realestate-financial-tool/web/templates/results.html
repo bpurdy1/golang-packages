@@ -1,0 +1,169 @@
+{{if .CashFlow.IsCashFlowPositive}}
+<div style="background: #d4edda; color: #155724; padding: 12px 20px; border-radius: 4px; margin-bottom: 15px; font-weight: bold; text-align: center;">
+    CASH FLOW POSITIVE: {{formatMoney .CashFlow.MonthlyCashFlow}}/mo ({{formatMoney .CashFlow.AnnualCashFlow}}/yr)
+</div>
+{{else}}
+<div style="background: #f8d7da; color: #721c24; padding: 12px 20px; border-radius: 4px; margin-bottom: 15px; font-weight: bold; text-align: center;">
+    CASH FLOW NEGATIVE: {{formatMoney .CashFlow.MonthlyCashFlow}}/mo ({{formatMoney .CashFlow.AnnualCashFlow}}/yr)
+</div>
+{{end}}
+
+<div class="card" style="padding: 15px;">
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
+        <!-- Property Details -->
+        <div>
+            <h3 class="section-title">Property</h3>
+            <div class="compact-row"><span>{{.Property.Name}}</span></div>
+            <div class="compact-row dim">{{.Property.Address}}</div>
+            <div class="compact-row dim">{{.Property.City}}, {{.Property.State}} {{.Property.ZipCode}}</div>
+            <div class="compact-row">{{.Property.NumberOfUnits}} units</div>
+        </div>
+
+        <!-- Financials -->
+        <div>
+            <h3 class="section-title">Financials</h3>
+            <div class="compact-row"><span class="label">Purchase:</span> {{formatMoney .CashFlow.PurchasePrice}}</div>
+            <div class="compact-row"><span class="label">Down:</span> {{formatMoney .CashFlow.DownPayment}}</div>
+            <div class="compact-row"><span class="label">Loan:</span> {{formatMoney .CashFlow.LoanAmount}}</div>
+            <div class="compact-row"><span class="label">Rate:</span> {{formatPercent .CashFlow.InterestRate}} / {{.CashFlow.LoanTermYears}}yr</div>
+            <div class="compact-row"><span class="label">Payment:</span> {{formatMoney .CashFlow.MonthlyMortgage}}/mo</div>
+        </div>
+
+        <!-- Monthly Expenses -->
+        <div>
+            <h3 class="section-title">Monthly Expenses</h3>
+            <div class="compact-row"><span class="label">Expenses:</span> {{formatMoney .CashFlow.MonthlyExpenses}}</div>
+            <div class="compact-row"><span class="label">Mortgage:</span> {{formatMoney .CashFlow.MonthlyMortgage}}</div>
+            <div class="compact-row" style="border-top: 1px solid #ddd; padding-top: 4px; margin-top: 4px;"><span class="label">Total:</span> <strong>{{formatMoney .CashFlow.MonthlyExpenses}}</strong></div>
+        </div>
+
+        <!-- Rental Units -->
+        <div>
+            <h3 class="section-title">Rental Units</h3>
+            {{range .Units}}
+            <div class="compact-row"><span class="label">{{.Name}}:</span> {{.Bedrooms}}bd/{{.Bathrooms}}ba - {{formatMoney .Rent}}</div>
+            {{end}}
+            <div class="compact-row" style="border-top: 1px solid #ddd; padding-top: 4px; margin-top: 4px;"><span class="label">Total:</span> <strong>{{formatMoney .CashFlow.MonthlyGrossIncome}}/mo</strong></div>
+        </div>
+    </div>
+</div>
+
+<!-- Key Metrics -->
+<div class="card" style="padding: 15px;">
+    <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; text-align: center;">
+        <div class="metric"><div class="metric-val">{{formatMoney .CashFlow.MonthlyCashFlow}}</div><div class="metric-lbl">Cash Flow/mo</div></div>
+        <div class="metric"><div class="metric-val">{{formatPercent .CashFlow.CapRate}}</div><div class="metric-lbl">Cap Rate</div></div>
+        <div class="metric"><div class="metric-val">{{formatPercent .CashFlow.CashOnCash}}</div><div class="metric-lbl">Cash-on-Cash</div></div>
+        <div class="metric"><div class="metric-val">{{formatDecimal .CashFlow.GRM}}</div><div class="metric-lbl">GRM</div></div>
+        <div class="metric"><div class="metric-val">{{formatDecimal .CashFlow.DSCR}}</div><div class="metric-lbl">DSCR</div></div>
+        <div class="metric"><div class="metric-val">{{formatPercent .CashFlow.BreakEvenRatio}}</div><div class="metric-lbl">Break-Even</div></div>
+    </div>
+</div>
+
+<!-- Cash Flow Table -->
+<div class="card" style="padding: 15px;">
+    <h3 class="section-title">Cash Flow</h3>
+    <table class="compact-table">
+        <tr><th></th><th>Monthly</th><th>Annual</th></tr>
+        <tr><td>Gross Income</td><td>{{formatMoney .CashFlow.MonthlyGrossIncome}}</td><td>{{formatMoney .CashFlow.AnnualGrossIncome}}</td></tr>
+        <tr><td>Expenses</td><td>{{formatMoney .CashFlow.MonthlyExpenses}}</td><td>{{formatMoney .CashFlow.AnnualExpenses}}</td></tr>
+        <tr><td>NOI</td><td>{{formatMoney .CashFlow.MonthlyNOI}}</td><td>{{formatMoney .CashFlow.AnnualNOI}}</td></tr>
+        <tr><td>Mortgage</td><td>{{formatMoney .CashFlow.MonthlyMortgage}}</td><td>{{formatMoney .CashFlow.AnnualMortgage}}</td></tr>
+        <tr class="total"><td><strong>Net Cash Flow</strong></td><td><strong>{{formatMoney .CashFlow.MonthlyCashFlow}}</strong></td><td><strong>{{formatMoney .CashFlow.AnnualCashFlow}}</strong></td></tr>
+    </table>
+</div>
+
+<!-- Scenario Comparison -->
+{{if .Scenarios}}
+<div class="card" style="padding: 15px;">
+    <h3 class="section-title">Down Payment Scenarios</h3>
+    <table class="compact-table">
+        <tr><th>Scenario</th><th>Monthly CF</th><th>Annual CF</th><th>Cash/Cash</th><th>Status</th></tr>
+        {{range .Scenarios}}
+        <tr>
+            <td>{{.Scenario.Name}}</td>
+            <td>{{formatMoney .MonthlyCashFlow}}</td>
+            <td>{{formatMoney .AnnualCashFlow}}</td>
+            <td>{{formatPercent .CashOnCash}}</td>
+            <td>{{if .IsPositive}}<span style="color: #28a745;">+</span>{{else}}<span style="color: #dc3545;">-</span>{{end}}</td>
+        </tr>
+        {{end}}
+    </table>
+</div>
+{{end}}
+
+<!-- Multi-Year Projection -->
+{{if .Projections}}
+<div class="card" style="padding: 15px;">
+    <h3 class="section-title">10-Year Projection</h3>
+    <table class="compact-table">
+        <tr><th>Yr</th><th>Income</th><th>Expenses</th><th>NOI</th><th>Cash Flow</th><th>Principal</th><th>Balance</th><th>Equity</th></tr>
+        {{range .Projections}}
+        <tr>
+            <td>{{.Year}}</td>
+            <td>{{formatMoney .GrossIncome}}</td>
+            <td>{{formatMoney .Expenses}}</td>
+            <td>{{formatMoney .NOI}}</td>
+            <td>{{formatMoney .CashFlow}}</td>
+            <td>{{formatMoney .PrincipalPaid}}</td>
+            <td>{{formatMoney .LoanBalance}}</td>
+            <td>{{formatMoney .Equity}}</td>
+        </tr>
+        {{end}}
+    </table>
+</div>
+{{end}}
+
+<!-- IRR -->
+{{if ge .IRR.HoldingYears 5}}
+<div class="card" style="padding: 15px;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: center;">
+        <div class="metric"><div class="metric-val" style="font-size: 2rem;">{{formatPercent .IRR.FiveYearIRR}}</div><div class="metric-lbl">5-Year IRR</div></div>
+        <div class="metric"><div class="metric-val" style="font-size: 2rem;">{{formatPercent .IRR.TenYearIRR}}</div><div class="metric-lbl">10-Year IRR</div></div>
+    </div>
+</div>
+{{end}}
+
+<!-- Charts -->
+<div class="card" style="padding: 15px; display: flex; flex-direction: column;">
+    <h3 class="section-title">Amortization Chart</h3>
+    <iframe id="amortChart" style="width: 100%; flex: 1; min-height: 600px; border: none;"></iframe>
+</div>
+
+<div class="card" style="padding: 15px; display: flex; flex-direction: column;">
+    <h3 class="section-title">Loan Summary Chart</h3>
+    <iframe id="summaryChart" style="width: 100%; flex: 1; min-height: 600px; border: none;"></iframe>
+</div>
+
+<script>
+    // Load charts after results render
+    (function() {
+        const purchasePrice = {{.CashFlow.PurchasePrice}};
+        const downPayment = {{.CashFlow.DownPayment}};
+        const downPaymentPct = purchasePrice > 0 ? (downPayment / purchasePrice) * 100 : 20;
+
+        const params = new URLSearchParams({
+            purchasePrice: purchasePrice.toString(),
+            downPaymentPct: downPaymentPct.toString(),
+            interestRate: '{{.CashFlow.InterestRate}}',
+            loanTerm: '{{.CashFlow.LoanTermYears}}'
+        });
+
+        document.getElementById('amortChart').src = '/chart/amortization?' + params;
+        document.getElementById('summaryChart').src = '/chart/summary?' + params;
+    })();
+</script>
+
+<style>
+    .section-title { font-size: 0.9rem; color: #007bff; margin: 0 0 8px 0; text-transform: uppercase; letter-spacing: 0.5px; }
+    .compact-row { font-size: 0.85rem; padding: 2px 0; }
+    .compact-row .label { color: #666; }
+    .compact-row.dim { color: #888; font-size: 0.8rem; }
+    .metric { background: #f8f9fa; padding: 10px; border-radius: 6px; }
+    .metric-val { font-size: 1.3rem; font-weight: bold; color: #333; }
+    .metric-lbl { font-size: 0.75rem; color: #666; margin-top: 2px; }
+    .compact-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    .compact-table th, .compact-table td { padding: 6px 8px; text-align: left; border-bottom: 1px solid #eee; }
+    .compact-table th { background: #f8f9fa; font-weight: 600; font-size: 0.8rem; }
+    .compact-table .total { background: #e9ecef; }
+</style>
