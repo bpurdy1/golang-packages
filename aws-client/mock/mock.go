@@ -14,8 +14,9 @@ import (
 	io "io"
 	reflect "reflect"
 
-	awsclient "github.com/bpurdy1/aws-client"
 	gomock "go.uber.org/mock/gomock"
+
+	awsclient "github.com/bpurdy1/golang-packages/aws-client"
 )
 
 // MockClient is a mock of Client interface.

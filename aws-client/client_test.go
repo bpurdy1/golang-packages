@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	awsclient "github.com/bpurdy1/aws-client"
-	"github.com/bpurdy1/aws-client/mock"
+	awsclient "github.com/bpurdy1/golang-packages/aws-client"
+	"github.com/bpurdy1/golang-packages/aws-client/mock"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
 )

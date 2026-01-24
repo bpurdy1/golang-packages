@@ -1,4 +1,4 @@
-module github.com/bpurdy1/aws-client
+module github.com/bpurdy1/golang-packages/aws-client
 
 go 1.25.6
 

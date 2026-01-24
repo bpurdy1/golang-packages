@@ -17,13 +17,6 @@
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true
     },
-    "realestate-financial-tool": {
-      "release-type": "go",
-      "package-name": "realestate-financial-tool",
-      "changelog-path": "CHANGELOG.md",
-      "bump-minor-pre-major": true,
-      "bump-patch-for-minor-pre-major": true
-    },
     "waitgroup": {
       "release-type": "go",
       "package-name": "waitgroup",
