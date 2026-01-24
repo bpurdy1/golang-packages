@@ -17,6 +17,13 @@
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true
     },
+    "sqlutils": {
+      "release-type": "go",
+      "package-name": "sqlutils",
+      "changelog-path": "CHANGELOG.md",
+      "bump-minor-pre-major": true,
+      "bump-patch-for-minor-pre-major": true
+    },
     "waitgroup": {
       "release-type": "go",
       "package-name": "waitgroup",
