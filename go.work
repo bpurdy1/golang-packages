@@ -4,5 +4,6 @@ use (
 	./aws-client
 	./parallel
 	./sqlutils
-	./waitgroup
+	./redis-client
+	./waitgroup	
 )

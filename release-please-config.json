@@ -24,6 +24,13 @@
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true
     },
+    "redis-client": {
+      "release-type": "go",
+      "package-name": "redis-client",
+      "changelog-path": "CHANGELOG.md",
+      "bump-minor-pre-major": true,
+      "bump-patch-for-minor-pre-major": true
+    },
     "waitgroup": {
       "release-type": "go",
       "package-name": "waitgroup",
