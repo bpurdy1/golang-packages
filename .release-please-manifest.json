@@ -1,5 +1,5 @@
 {
-  "aws-client": "0.0.0",
+  "aws-client": "1.0.0",
   "parallel": "0.0.0",
   "realestate-financial-tool": "0.0.0",
   "waitgroup": "0.0.0"
