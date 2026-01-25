@@ -31,6 +31,20 @@
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true
     },
+    "nats-client": {
+      "release-type": "go",
+      "package-name": "nats-client",
+      "changelog-path": "CHANGELOG.md",
+      "bump-minor-pre-major": true,
+      "bump-patch-for-minor-pre-major": true
+    },
+    "pg-client": {
+      "release-type": "go",
+      "package-name": "pg-client",
+      "changelog-path": "CHANGELOG.md",
+      "bump-minor-pre-major": true,
+      "bump-patch-for-minor-pre-major": true
+    },
     "waitgroup": {
       "release-type": "go",
       "package-name": "waitgroup",
