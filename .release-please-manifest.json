@@ -2,7 +2,7 @@
   "aws-client": "1.0.0",
   "parallel": "1.0.0",
   "sqlutils": "1.0.0",
-  "redis-client": "1.1.0",
+  "redis-client": "1.2.0",
   "nats-client": "1.0.1",
   "pg-client": "1.0.1",
   "waitgroup": "1.0.0"
