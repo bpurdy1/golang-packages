@@ -2,8 +2,10 @@ go 1.25.6
 
 use (
 	./aws-client
+	./nats-client
 	./parallel
-	./sqlutils
+	./pg-client
 	./redis-client
-	./waitgroup	
+	./sqlutils
+	./waitgroup
 )
