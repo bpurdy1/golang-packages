@@ -4,6 +4,6 @@
   "sqlutils": "1.0.0",
   "redis-client": "1.1.0",
   "nats-client": "1.0.1",
-  "pg-client": "1.0.1",
+  "pg-client": "1.1.0",
   "waitgroup": "1.0.0"
 }
