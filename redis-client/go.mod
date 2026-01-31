@@ -1,11 +1,11 @@
-module redis-client
+module github.com/bpurdy1/golang-packages/redis-client
 
 go 1.25.6
 
 require (
 	github.com/caarlos0/env/v11 v11.3.1
 	github.com/redis/go-redis/v9 v9.17.2
-	go.uber.org/mock v0.5.0
+	go.uber.org/mock v0.6.0
 )
 
 require (

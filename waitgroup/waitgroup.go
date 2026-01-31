@@ -1,18 +1,15 @@
 package waitgroup
 
 import (
-	"errors"
 	"sync"
-)
-
-var (
-	ErrInvalidLimit = errors.New("limit must be at least 1")
 )
 
 type WaitGroup interface {
 	Add(delta int)
 	Done()
 	Wait()
+	Limit() int
+	WithWaitGroup(wg *sync.WaitGroup) WaitGroup
 }
 
 type LimitWaitGroup struct {
@@ -20,50 +17,38 @@ type LimitWaitGroup struct {
 	limit chan struct{}
 }
 
-type option func(*LimitWaitGroup) error
-
-func WithLimit(limit int) option {
-	return func(wg *LimitWaitGroup) error {
-		if limit < 1 {
-			return ErrInvalidLimit
-		}
-		wg.limit = make(chan struct{}, limit)
-		return nil
+// NewLimitWaitGroup creates a new LimitWaitGroup with no limit.
+func NewLimitWaitGroup(limit int) WaitGroup {
+	lwg := &LimitWaitGroup{
+		wg:    sync.WaitGroup{},
+		limit: make(chan struct{}, limit),
 	}
-}
-func WithWaitGroup(wg sync.WaitGroup) option {
-	return func(lwg *LimitWaitGroup) error {
-		lwg.wg = wg
-		return nil
-	}
+	return lwg
 }
 
-// NewWaitGroup creates a WaitGroup with an optional concurrency limit.
-// If limit <= 0, it returns a standard sync.WaitGroup.
-func NewLimitWaitGroup(opts ...option) (WaitGroup, error) {
-	if len(opts) == 0 {
-		return &sync.WaitGroup{}, nil
-	}
+func (w *LimitWaitGroup) Limit() int {
+	return cap(w.limit)
+}
 
-	wg := &LimitWaitGroup{}
-	for _, opt := range opts {
-		if err := opt(wg); err != nil {
-			return nil, err
-		}
-	}
-	return wg, nil
+func (w *LimitWaitGroup) WithWaitGroup(wg *sync.WaitGroup) WaitGroup {
+	w.wg = *wg
+	return w
 }
 
 func (w *LimitWaitGroup) Add(delta int) {
-	for i := 0; i < delta; i++ {
-		w.limit <- struct{}{}
+	if w.limit != nil {
+		for i := 0; i < delta; i++ {
+			w.limit <- struct{}{}
+		}
 	}
 	w.wg.Add(delta)
 }
 
 func (w *LimitWaitGroup) Done() {
 	w.wg.Done()
-	<-w.limit
+	if w.limit != nil {
+		<-w.limit
+	}
 }
 
 func (w *LimitWaitGroup) Wait() {

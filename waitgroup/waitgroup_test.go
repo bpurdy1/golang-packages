@@ -7,52 +7,15 @@ import (
 	"time"
 )
 
-func TestNewLimitWaitGroup(t *testing.T) {
-	tests := []struct {
-		name    string
-		opts    []option
-		wantErr bool
-	}{
-		{
-			name:    "valid limit",
-			opts:    []option{WithLimit(5)},
-			wantErr: false,
-		},
-		{
-			name:    "no limit returns sync.WaitGroup",
-			opts:    nil,
-			wantErr: false,
-		},
-		{
-			name:    "zero limit returns error",
-			opts:    []option{WithLimit(0)},
-			wantErr: true,
-		},
-		{
-			name:    "negative limit returns error",
-			opts:    []option{WithLimit(-1)},
-			wantErr: true,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			wg, err := NewLimitWaitGroup(tt.opts...)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("NewLimitWaitGroup() error = %v, wantErr %v", err, tt.wantErr)
-			}
-			if !tt.wantErr && wg == nil {
-				t.Error("NewLimitWaitGroup() returned nil WaitGroup with no error")
-			}
-		})
+func TestNewWaitGroup(t *testing.T) {
+	wg := NewWaitGroup(5)
+	if wg.Limit() != 5 {
+		t.Errorf("expected limit = 5, got %d", wg.Limit())
 	}
 }
 
 func TestLimitWaitGroup_BasicUsage(t *testing.T) {
-	wg, err := NewLimitWaitGroup(WithLimit(3))
-	if err != nil {
-		t.Fatalf("NewLimitWaitGroup() error = %v", err)
-	}
+	wg := NewWaitGroup(3)
 
 	var counter int64
 	for i := 0; i < 10; i++ {
@@ -72,10 +35,7 @@ func TestLimitWaitGroup_BasicUsage(t *testing.T) {
 
 func TestLimitWaitGroup_ConcurrencyLimit(t *testing.T) {
 	maxConcurrent := 3
-	wg, err := NewLimitWaitGroup(WithLimit(maxConcurrent))
-	if err != nil {
-		t.Fatalf("NewLimitWaitGroup() error = %v", err)
-	}
+	wg := NewWaitGroup(maxConcurrent)
 
 	var currentConcurrent int64
 	var maxObserved int64
@@ -94,7 +54,6 @@ func TestLimitWaitGroup_ConcurrencyLimit(t *testing.T) {
 			}
 			mu.Unlock()
 
-			// Simulate some work
 			time.Sleep(10 * time.Millisecond)
 
 			atomic.AddInt64(&currentConcurrent, -1)
@@ -108,17 +67,11 @@ func TestLimitWaitGroup_ConcurrencyLimit(t *testing.T) {
 	}
 }
 
-// TestLimitWaitGroup_RaceCondition tests for race conditions with concurrent Add/Done/Wait calls.
-// Run with: go test -race
 func TestLimitWaitGroup_RaceCondition(t *testing.T) {
-	wg, err := NewLimitWaitGroup(WithLimit(5))
-	if err != nil {
-		t.Fatalf("NewLimitWaitGroup() error = %v", err)
-	}
+	wg := NewWaitGroup(5)
 
 	var counter int64
 
-	// Launch multiple goroutines that all call Add/Done
 	for i := 0; i < 100; i++ {
 		wg.Add(1)
 		go func() {
@@ -134,12 +87,8 @@ func TestLimitWaitGroup_RaceCondition(t *testing.T) {
 	}
 }
 
-// TestLimitWaitGroup_RaceMultipleAdds tests race conditions when calling Add with delta > 1
 func TestLimitWaitGroup_RaceMultipleAdds(t *testing.T) {
-	wg, err := NewLimitWaitGroup(WithLimit(10))
-	if err != nil {
-		t.Fatalf("NewLimitWaitGroup() error = %v", err)
-	}
+	wg := NewWaitGroup(10)
 
 	var counter int64
 	numBatches := 20
@@ -163,12 +112,8 @@ func TestLimitWaitGroup_RaceMultipleAdds(t *testing.T) {
 	}
 }
 
-// TestLimitWaitGroup_RapidAddDone tests rapid Add/Done cycling for race conditions
 func TestLimitWaitGroup_RapidAddDone(t *testing.T) {
-	wg, err := NewLimitWaitGroup(WithLimit(2))
-	if err != nil {
-		t.Fatalf("NewLimitWaitGroup() error = %v", err)
-	}
+	wg := NewWaitGroup(2)
 
 	iterations := 1000
 	var completed int64
@@ -188,17 +133,12 @@ func TestLimitWaitGroup_RapidAddDone(t *testing.T) {
 	}
 }
 
-// TestLimitWaitGroup_ConcurrentWaiters tests multiple goroutines calling Wait concurrently
 func TestLimitWaitGroup_ConcurrentWaiters(t *testing.T) {
-	wg, err := NewLimitWaitGroup(WithLimit(3))
-	if err != nil {
-		t.Fatalf("NewLimitWaitGroup() error = %v", err)
-	}
+	wg := NewWaitGroup(3)
 
 	var workDone int64
 	var waitersFinished int64
 
-	// Start some work
 	for i := 0; i < 10; i++ {
 		wg.Add(1)
 		go func() {
@@ -208,7 +148,6 @@ func TestLimitWaitGroup_ConcurrentWaiters(t *testing.T) {
 		}()
 	}
 
-	// Have multiple goroutines wait
 	var waiterWg sync.WaitGroup
 	for i := 0; i < 5; i++ {
 		waiterWg.Add(1)
@@ -229,16 +168,12 @@ func TestLimitWaitGroup_ConcurrentWaiters(t *testing.T) {
 	}
 }
 
-// TestLimitWaitGroup_StressTest performs a stress test with many concurrent operations
 func TestLimitWaitGroup_StressTest(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping stress test in short mode")
 	}
 
-	wg, err := NewLimitWaitGroup(WithLimit(50))
-	if err != nil {
-		t.Fatalf("NewLimitWaitGroup() error = %v", err)
-	}
+	wg := NewWaitGroup(50)
 
 	var counter int64
 	numGoroutines := 10000
@@ -258,12 +193,8 @@ func TestLimitWaitGroup_StressTest(t *testing.T) {
 	}
 }
 
-// TestLimitWaitGroup_SingleConcurrency ensures limit of 1 works correctly (sequential execution)
 func TestLimitWaitGroup_SingleConcurrency(t *testing.T) {
-	wg, err := NewLimitWaitGroup(WithLimit(1))
-	if err != nil {
-		t.Fatalf("NewLimitWaitGroup() error = %v", err)
-	}
+	wg := NewWaitGroup(1)
 
 	var currentConcurrent int64
 	var maxObserved int64
@@ -292,28 +223,5 @@ func TestLimitWaitGroup_SingleConcurrency(t *testing.T) {
 
 	if maxObserved > 1 {
 		t.Errorf("max concurrent goroutines = %d, should never exceed 1", maxObserved)
-	}
-}
-
-// TestNoLimit_ReturnsStandardWaitGroup tests that no options returns a working sync.WaitGroup
-func TestNoLimit_ReturnsStandardWaitGroup(t *testing.T) {
-	wg, err := NewLimitWaitGroup()
-	if err != nil {
-		t.Fatalf("NewLimitWaitGroup() error = %v", err)
-	}
-
-	var counter int64
-	for i := 0; i < 100; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			atomic.AddInt64(&counter, 1)
-		}()
-	}
-
-	wg.Wait()
-
-	if counter != 100 {
-		t.Errorf("expected counter = 100, got %d", counter)
 	}
 }

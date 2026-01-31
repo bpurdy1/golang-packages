@@ -1,4 +1,4 @@
-module pgclient
+module github.com/bpurdy1/golang-packages/pg-client
 
 go 1.25.6
 
