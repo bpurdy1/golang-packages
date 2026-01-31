@@ -1,7 +1,10 @@
 go 1.25.6
 
 use (
+	.
 	./aws-client
+	./logging/slog
+	./logging/zerolog
 	./nats-client
 	./parallel
 	./pg-client
