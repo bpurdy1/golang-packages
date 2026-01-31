@@ -5,7 +5,7 @@
   "redis-client": "1.2.0",
   "nats-client": "1.1.0",
   "pg-client": "1.1.0",
-  "waitgroup": "1.0.0",
+  "waitgroup": "1.1.0",
   "logging/slog": "0.0.0",
   "logging/zerolog": "1.0.0"
 }
