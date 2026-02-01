@@ -1,0 +1,26 @@
+name: Update pkg.go.dev
+
+on:
+  push:
+    tags:
+      - '**/v*'
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract package path and version
+        id: extract
+        run: |
+          TAG="${{ github.ref_name }}"
+          # Extract version (last part after final /)
+          VERSION="${TAG##*/}"
+          # Extract package path (everything before /v*)
+          PACKAGE="${TAG%/*}"
+          echo "package=$PACKAGE" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Updating pkg.go.dev for $PACKAGE@$VERSION"
+
+      - name: Trigger pkg.go.dev update
+        run: |
+          curl -s "https://proxy.golang.org/github.com/bpurdy1/golang-packages/${{ steps.extract.outputs.package }}/@v/${{ steps.extract.outputs.version }}.info"
