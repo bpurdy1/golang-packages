@@ -7,15 +7,15 @@ import (
 	"time"
 )
 
-func TestNewWaitGroup(t *testing.T) {
-	wg := NewWaitGroup(5)
+func TestNewLimitWaitGroup(t *testing.T) {
+	wg := NewLimitWaitGroup(5)
 	if wg.Limit() != 5 {
 		t.Errorf("expected limit = 5, got %d", wg.Limit())
 	}
 }
 
 func TestLimitWaitGroup_BasicUsage(t *testing.T) {
-	wg := NewWaitGroup(3)
+	wg := NewLimitWaitGroup(3)
 
 	var counter int64
 	for i := 0; i < 10; i++ {
@@ -35,7 +35,7 @@ func TestLimitWaitGroup_BasicUsage(t *testing.T) {
 
 func TestLimitWaitGroup_ConcurrencyLimit(t *testing.T) {
 	maxConcurrent := 3
-	wg := NewWaitGroup(maxConcurrent)
+	wg := NewLimitWaitGroup(maxConcurrent)
 
 	var currentConcurrent int64
 	var maxObserved int64
@@ -68,7 +68,7 @@ func TestLimitWaitGroup_ConcurrencyLimit(t *testing.T) {
 }
 
 func TestLimitWaitGroup_RaceCondition(t *testing.T) {
-	wg := NewWaitGroup(5)
+	wg := NewLimitWaitGroup(5)
 
 	var counter int64
 
@@ -88,7 +88,7 @@ func TestLimitWaitGroup_RaceCondition(t *testing.T) {
 }
 
 func TestLimitWaitGroup_RaceMultipleAdds(t *testing.T) {
-	wg := NewWaitGroup(10)
+	wg := NewLimitWaitGroup(10)
 
 	var counter int64
 	numBatches := 20
@@ -113,7 +113,7 @@ func TestLimitWaitGroup_RaceMultipleAdds(t *testing.T) {
 }
 
 func TestLimitWaitGroup_RapidAddDone(t *testing.T) {
-	wg := NewWaitGroup(2)
+	wg := NewLimitWaitGroup(2)
 
 	iterations := 1000
 	var completed int64
@@ -134,7 +134,7 @@ func TestLimitWaitGroup_RapidAddDone(t *testing.T) {
 }
 
 func TestLimitWaitGroup_ConcurrentWaiters(t *testing.T) {
-	wg := NewWaitGroup(3)
+	wg := NewLimitWaitGroup(3)
 
 	var workDone int64
 	var waitersFinished int64
@@ -173,7 +173,7 @@ func TestLimitWaitGroup_StressTest(t *testing.T) {
 		t.Skip("skipping stress test in short mode")
 	}
 
-	wg := NewWaitGroup(50)
+	wg := NewLimitWaitGroup(50)
 
 	var counter int64
 	numGoroutines := 10000
@@ -194,7 +194,7 @@ func TestLimitWaitGroup_StressTest(t *testing.T) {
 }
 
 func TestLimitWaitGroup_SingleConcurrency(t *testing.T) {
-	wg := NewWaitGroup(1)
+	wg := NewLimitWaitGroup(1)
 
 	var currentConcurrent int64
 	var maxObserved int64
