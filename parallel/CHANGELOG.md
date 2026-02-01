@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/bpurdy1/golang-packages/compare/parallel/v1.0.0...parallel/v1.0.1) (2026-02-01)
+
+
+### Bug Fixes
+
+* convert parallel and waitgroup from submodules to regular directories ([e8758d7](https://github.com/bpurdy1/golang-packages/commit/e8758d760aea7557b1a713a047a4d125f68e3dc4))
+
 ## 1.0.0 (2026-01-24)
 
 
