@@ -1,4 +1,4 @@
-module github.com/bpurdy1/golang-packages/logging/slog
+module github.com/bpurdy1/golang-packages/logging/log
 
 go 1.25.6
 

@@ -30,8 +30,8 @@ vendor/
 Thumbs.db
 
 # WORK
-go.work
-go.work.sum
+*go.work
+*go.work.sum
 
 # Environment
 .env
