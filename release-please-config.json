@@ -68,21 +68,24 @@
     },
     "middleware/jwt-middleware": {
       "release-type": "go",
-      "package-name": "aws-client",
+      "component": "middleware/jwt-middleware",
+      "package-name": "middleware/jwt-middleware",
       "changelog-path": "CHANGELOG.md",
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true
     },
     "middleware/header-middleware": {
       "release-type": "go",
-      "package-name": "aws-client",
+      "component": "middleware/header-middleware",
+      "package-name": "middleware/header-middleware",
       "changelog-path": "CHANGELOG.md",
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true
     },
     "middleware/request-id-middleware": {
       "release-type": "go",
-      "package-name": "aws-client",
+      "component": "middleware/request-id-middleware",
+      "package-name": "middleware/request-id-middleware",
       "changelog-path": "CHANGELOG.md",
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true

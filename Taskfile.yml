@@ -6,7 +6,7 @@ tasks:
     requires:
       vars: [CLI_ARGS]
     cmds:
-      - jq '.packages["{{.CLI_ARGS}}"] = .packages[.packages | keys[0]]' release-please-config.json > tmp.json && mv tmp.json release-please-config.json
+      - jq '.packages["{{.CLI_ARGS}}"] = {"release-type":"go","component":"{{.CLI_ARGS}}","package-name":"{{.CLI_ARGS}}","changelog-path":"CHANGELOG.md","bump-minor-pre-major":true,"bump-patch-for-minor-pre-major":true}' release-please-config.json > tmp.json && mv tmp.json release-please-config.json
       - jq '.["{{.CLI_ARGS}}"] = "0.0.0"' .release-please-manifest.json > tmp.json && mv tmp.json .release-please-manifest.json
       - echo "Added {{.CLI_ARGS}}"
 
