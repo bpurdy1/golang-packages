@@ -29,6 +29,10 @@ vendor/
 .DS_Store
 Thumbs.db
 
+# WORK
+go.work
+go.work.sum
+
 # Environment
 .env
 .env.local

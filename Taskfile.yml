@@ -9,3 +9,11 @@ tasks:
       - jq '.packages["{{.CLI_ARGS}}"] = .packages[.packages | keys[0]]' release-please-config.json > tmp.json && mv tmp.json release-please-config.json
       - jq '.["{{.CLI_ARGS}}"] = "0.0.0"' .release-please-manifest.json > tmp.json && mv tmp.json .release-please-manifest.json
       - echo "Added {{.CLI_ARGS}}"
+
+  go-work:
+    desc: "Regenerate go.work from all go.mod files"
+    cmds:
+      - rm -f go.work
+      - go work init
+      - find . -name go.mod -not -path './.git/*' | xargs -I{} dirname {} | sort | xargs go work use
+      - echo "Regenerated go.work"
