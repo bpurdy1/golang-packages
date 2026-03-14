@@ -49,3 +49,4 @@ func FromContext[T any](ctx context.Context) (T, bool) {
 	val, ok := ctx.Value(ctxKey[T]{}).(T)
 	return val, ok
 }
+
