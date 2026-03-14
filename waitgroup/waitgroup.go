@@ -1,8 +1,11 @@
 package waitgroup
 
 import (
+	"errors"
 	"sync"
 )
+
+var ErrDeltaExceedingLimit = errors.New("waitgroup: Add called with delta exceeding limit")
 
 type WaitGroup interface {
 	Add(delta int)
@@ -31,13 +34,16 @@ func (w *LimitWaitGroup) Limit() int {
 }
 
 func (w *LimitWaitGroup) WithWaitGroup(wg *sync.WaitGroup) WaitGroup {
-	w.wg = *wg
+	w.wg = *wg //nolint:govet // intentional copy to replace the internal waitgroup
 	return w
 }
 
 func (w *LimitWaitGroup) Add(delta int) {
 	if w.limit != nil {
-		for i := 0; i < delta; i++ {
+		if delta > cap(w.limit) {
+			panic(ErrDeltaExceedingLimit)
+		}
+		for range delta {
 			w.limit <- struct{}{}
 		}
 	}
