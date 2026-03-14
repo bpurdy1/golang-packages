@@ -65,6 +65,27 @@
       "changelog-path": "CHANGELOG.md",
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true
+    },
+    "middleware/jwt-middleware": {
+      "release-type": "go",
+      "package-name": "aws-client",
+      "changelog-path": "CHANGELOG.md",
+      "bump-minor-pre-major": true,
+      "bump-patch-for-minor-pre-major": true
+    },
+    "middleware/header-middleware": {
+      "release-type": "go",
+      "package-name": "aws-client",
+      "changelog-path": "CHANGELOG.md",
+      "bump-minor-pre-major": true,
+      "bump-patch-for-minor-pre-major": true
+    },
+    "middleware/request-id-middleware": {
+      "release-type": "go",
+      "package-name": "aws-client",
+      "changelog-path": "CHANGELOG.md",
+      "bump-minor-pre-major": true,
+      "bump-patch-for-minor-pre-major": true
     }
   }
 }

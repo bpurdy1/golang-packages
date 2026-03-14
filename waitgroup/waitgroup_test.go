@@ -225,3 +225,14 @@ func TestLimitWaitGroup_SingleConcurrency(t *testing.T) {
 		t.Errorf("max concurrent goroutines = %d, should never exceed 1", maxObserved)
 	}
 }
+
+func TestAddExceedsLimit_Panics(t *testing.T) {
+	defer func() {
+		if r := recover(); r == nil {
+			t.Fatal("expected panic when Add(4) exceeds limit of 3")
+		}
+	}()
+
+	wg := NewLimitWaitGroup(3)
+	wg.Add(4)
+}
