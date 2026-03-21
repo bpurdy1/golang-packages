@@ -2,6 +2,7 @@ package zerologlogger
 
 import (
 	"context"
+	"io"
 	"os"
 	"strconv"
 	"time"
@@ -32,15 +33,16 @@ var (
 )
 
 // Config represents the settings populated by caarlos0/env
-type Config struct {
+type option struct {
 	LogLevel          string `env:"LOG_LEVEL" envDefault:"info"`
 	ConsoleWriter     bool   `env:"LOG_CONSOLE" envDefault:"false"`
 	CallerMarshalFunc func(pc uintptr, file string, line int) string
+	Writer            io.Writer
 }
-type Option func(*Config)
+type Option func(*option)
 
-func NewConfig() (*Config, error) {
-	var cfg Config
+func NewOption() (*option, error) {
+	var cfg option
 	if err := env.Parse(&cfg); err != nil {
 		return nil, err
 	}
@@ -48,25 +50,21 @@ func NewConfig() (*Config, error) {
 }
 
 func SetGlobal(opts ...Option) error {
-	cfg, err := NewConfig()
+	newLogger := NewLogger()
+	log.Logger = newLogger
+	zerolog.DefaultContextLogger = &newLogger
+	return nil
+}
+
+func NewLogger(opts ...Option) zerolog.Logger {
+	cfg, err := NewOption()
 	if err != nil {
-		return err
+		log.Fatal().Err(err).Msg("Failed to parse zerlog option")
 	}
 	for _, opt := range opts {
 		opt(cfg)
 	}
 
-	newLogger := NewLogger(cfg)
-	log.Logger = newLogger
-	zerolog.DefaultContextLogger = &newLogger
-
-	return nil
-}
-
-func NewLogger(cfg *Config) zerolog.Logger {
-	if cfg == nil {
-		return log.Logger
-	}
 	if cfg.CallerMarshalFunc != nil {
 		zerolog.CallerMarshalFunc = cfg.CallerMarshalFunc
 	} else {
@@ -79,15 +77,20 @@ func NewLogger(cfg *Config) zerolog.Logger {
 		level = zerolog.InfoLevel
 	}
 
+	w := cfg.Writer
+	if w == nil {
+		w = os.Stderr
+	}
+
 	var out zerolog.LevelWriter
 	if cfg.ConsoleWriter {
 		out = zerolog.MultiLevelWriter(
 			zerolog.ConsoleWriter{
-				Out:        os.Stderr,
+				Out:        w,
 				TimeFormat: time.RFC3339,
 			})
 	} else {
-		out = zerolog.MultiLevelWriter(os.Stderr)
+		out = zerolog.MultiLevelWriter(w)
 	}
 
 	newlogger := zerolog.
