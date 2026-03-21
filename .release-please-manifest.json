@@ -7,7 +7,7 @@
   "pg-client": "1.3.0",
   "waitgroup": "1.3.0",
   "logging/slog": "1.2.0",
-  "logging/zerolog": "1.2.0",
+  "logging/zerolog": "1.3.0",
   "middleware/jwt-middleware": "1.0.0",
   "middleware/header-middleware": "1.0.0",
   "middleware/request-id-middleware": "1.0.0"
