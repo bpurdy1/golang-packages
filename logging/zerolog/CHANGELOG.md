@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/bpurdy1/golang-packages/compare/logging/zerolog/v1.2.0...logging/zerolog/v1.3.0) (2026-03-21)
+
+
+### Features
+
+* **logging/zerolog:** add WithWriter option and tests ([ce19cf3](https://github.com/bpurdy1/golang-packages/commit/ce19cf3a1d87b11a4155f913a57990fdddc9b827))
+
 ## [1.2.0](https://github.com/bpurdy1/golang-packages/compare/logging/zerolog/v1.1.1...logging/zerolog/v1.2.0) (2026-03-14)
 
 
