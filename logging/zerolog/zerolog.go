@@ -152,6 +152,9 @@ func Error(err error, msg string) {
 func Errorf(err error, format string, args ...any) {
 	log.Error().Err(err).Msgf(format, args...)
 }
+func Err(err error) *zerolog.Event {
+	return log.Error().Err(err)
+}
 
 func Fatal(msg string) {
 	log.Fatal().Msg(msg)
